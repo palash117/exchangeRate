@@ -66,10 +66,10 @@ var updateConversionDisplay= ()=>{
     let toCurr              = toCurrencySelect.value;
 
     let ratio               = exchageRateMap[toCurr]/exchageRateMap[fromCurr];
-    let value               = fromValue * ratio;
+    let value               = (fromValue * ratio).toFixed(3);
     fromCurrencyTA.value    = fromValue;
     toCurrencyTA.value      = value;
-    
+
     updateExchangeRateMessage()
 }
 var swapCurrencyExchange = ()=>{
@@ -87,7 +87,7 @@ var swapCurrencyExchange = ()=>{
 var updateExchangeRateMessage = ()=>{
     let fromCurr            = fromCurrencySelect.value;    
     let toCurr              = toCurrencySelect.value;
-    let ratio               = exchageRateMap[toCurr]/exchageRateMap[fromCurr];
+    let ratio               = (exchageRateMap[toCurr]/exchageRateMap[fromCurr]).toFixed(3);
 
     exchangeRateMessage.innerHTML = `1 ${fromCurrencySelect.value} equals ${ratio} ${toCurrencySelect.value}`
 }
