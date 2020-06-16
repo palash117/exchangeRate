@@ -83,6 +83,8 @@ var fetchExchangeRate = (func)=>{
 var updateExchangeRate=()=>{
     fetchExchangeRate( (resp)=>{
         exchageRateMap                  = resp.rates;
+        updateConversionDisplay()
+        
     })
 }
 /**
@@ -124,7 +126,7 @@ var updateExchangeRateMessage = ()=>{
     let toCurr                      = toCurrencySelect.value;
     let ratio                       = (exchageRateMap[toCurr]/exchageRateMap[fromCurr]).toFixed(3);
 
-    exchangeRateMessage.innerHTML   = `1 ${fromCurrencySelect.value} equals ${ratio} ${toCurrencySelect.value}`
+    exchangeRateMessage.innerHTML   = `1 ${fromCurrencySelect.value} = ${ratio} ${toCurrencySelect.value}`
 }
 setTimeout(init,1)
 
