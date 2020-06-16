@@ -1,8 +1,10 @@
 // CONSTANTS
-const EXCHAGE_RATE_API_PATH = "https://api.exchangeratesapi.io/latest?base=INR"
+const EXCHAGE_RATE_API_PATH     = "https://api.exchangeratesapi.io/latest?base=INR"
 const PRE_SELECTED_FROM         = "INR";
 const PRE_SELECTED_TO           = "JPY";
 const BASE_CURRENCY             = "INR";
+const REFRESH_TIME              = 5 * 1000;
+
 
 // VARIABLES
 var currencyList            
@@ -14,7 +16,7 @@ var fromCurrencyTA;
 var toCurrencyTA;
 var swapButton;
 var exchangeRateMessage;
-
+var refreshToken;
 /**
  * init INITIALIZES CODE
  */
@@ -23,6 +25,7 @@ function init(){
     initEventListeners()
 
     setInitDomValues();
+    refreshToken = setTimeout(exchangeRateRefresher, REFRESH_TIME)
 }
 
 /**
@@ -75,6 +78,14 @@ var fetchExchangeRate = (func)=>{
     .then(t=> func(t))
 }
 /**
+ * updateExchangeRate calls fetchExchangeRate and updates the var exchangeRateMap with recent value;
+ */
+var updateExchangeRate=()=>{
+    fetchExchangeRate( (resp)=>{
+        exchageRateMap                  = resp.rates;
+    })
+}
+/**
  * updateConversionDisplay UPDATES CURRENCY VALUE BASED ON SELECTED CURRENCIES AND FROM CURRENCY VALUE
  * 
  */
@@ -116,3 +127,16 @@ var updateExchangeRateMessage = ()=>{
     exchangeRateMessage.innerHTML   = `1 ${fromCurrencySelect.value} equals ${ratio} ${toCurrencySelect.value}`
 }
 setTimeout(init,1)
+
+/**
+ * exchangeRateRefresher calls updateExchangeRate and sets itself as callback after REFRESH_TIME period
+ */
+var exchangeRateRefresher = ()=>{
+    updateExchangeRate();
+    refreshToken = setTimeout(exchangeRateRefresher , REFRESH_TIME)
+}
+
+
+window.unload =()=> {
+    clearTimeout(refreshToken);
+}
